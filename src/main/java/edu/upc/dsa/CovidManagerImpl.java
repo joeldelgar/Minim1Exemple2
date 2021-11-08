@@ -33,7 +33,7 @@ public class CovidManagerImpl implements Covid19Manager{
     @Override
     public void addVacuna(String idUser, String idVacuna, String data) {
         Persona persona = this.listaPersonas.get(idUser);
-        Vacuna vacuna = getVacunaByName(idVacuna);
+        Vacuna vacuna = getVacunaById(idVacuna);
         if(persona != null){
             logger.info("Persona trobada:"+idUser);
             persona.setVacunas(idVacuna); //La persona x ha sigut vacunada amb la vacuna Y
@@ -41,17 +41,6 @@ public class CovidManagerImpl implements Covid19Manager{
             listaVacunados.add(vacuna); //Afegim a la llista de vacunats
         }
     }
-
-    public Vacuna getVacunaByName(String marcaVacuna) {
-        Vacuna vacuna = null;
-        for (Vacuna v: this.listaVacunas){
-            if (v.getMarca().compareTo(marcaVacuna)==0) {
-                vacuna= v;
-            }
-        }
-        return vacuna;
-    }
-
 
     @Override
     public List<Vacuna> listarVacunas() {
@@ -72,11 +61,12 @@ public class CovidManagerImpl implements Covid19Manager{
     }
 
     @Override
-    public void addSeguimiento(String idUser, String data, String descripcion){
+    public Seguimiento addSeguimiento(String idUser, String data, String descripcion){
         Persona p = this.listaPersonas.get(idUser);
         Seguimiento s = new Seguimiento(data,descripcion);
         p.listaSeguimiento.add(s);
         logger.info("A la persona"+idUser+" se li ha afegit un seguiment:"+s);
+        return s;
     }
 
     @Override
@@ -110,6 +100,17 @@ public class CovidManagerImpl implements Covid19Manager{
     public Persona getUserById(String name) {
         Persona p = listaPersonas.get(name);
         return p;
+    }
+
+    @Override
+    public Vacuna getVacunaById(String marca) {
+        Vacuna vacuna = null;
+        for (Vacuna v: this.listaVacunas){
+            if (v.getMarca().compareTo(marca)==0) {
+                vacuna= v;
+            }
+        }
+        return vacuna;
     }
 
 
